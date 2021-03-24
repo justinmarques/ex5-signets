@@ -1,11 +1,14 @@
 import './ListeDossiers.scss';
 import Dossier from './Dossier';
 import * as crudDossiers from '../services/crud-dossiers';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
-export default function ListeDossiers({utilisateur, etatDossiers}) {
+export default function ListeDossiers({utilisateur, etatDossiers, trierDossiers}) {
   // État des dossiers (vient du composant Appli)
   const [dossiers, setDossiers] = etatDossiers;
+
+  // État du tri des dossiers
+  const [tri,] = trierDossiers;
 
   // Lire les dossiers dans Firestore et forcer le réaffichage du composant
   // Remarquez que ce code est dans un useEffect() car on veut l'exécuter 
@@ -15,10 +18,10 @@ export default function ListeDossiers({utilisateur, etatDossiers}) {
   // forcé par la mutation de l'état des dossiers
   useEffect(
     () => {
-      crudDossiers.lireTout(utilisateur.uid).then(
+      crudDossiers.lireTout(utilisateur.uid, tri).then(
         dossiers => setDossiers(dossiers)
       )
-    }, []
+    }, [tri]
   );
 
   /**

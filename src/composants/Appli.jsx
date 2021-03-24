@@ -1,15 +1,20 @@
-import './Appli.scss';
-import Entete from './Entete';
-import ListeDossiers from './ListeDossiers';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import Accueil from './Accueil';
-import { useEffect, useState } from 'react';
-import AjouterDossier from './AjouterDossier';
-import * as crudDossiers from '../services/crud-dossiers';
-import * as crudUtilisateurs from '../services/crud-utilisateurs';
+import "./Appli.scss";
+import Entete from "./Entete";
+import ListeDossiers from "./ListeDossiers";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+import Accueil from "./Accueil";
+import { useEffect, useState } from "react";
+import AjouterDossier from "./AjouterDossier";
+import * as crudDossiers from "../services/crud-dossiers";
+import * as crudUtilisateurs from "../services/crud-utilisateurs";
+import TriDossiers from "./TriDossiers";
 
 export default function Appli() {
+
+  // État du tri des dossiers
+  const trierDossiers = useState(0);
+
   // État de l'utilisateur (pas connecté = null / connecté = objet FB-Auth spécial)
   const [utilisateur, setUtilisateur] = useState(null);
 
@@ -21,11 +26,11 @@ export default function Appli() {
   const [ouvertAD, setOuvertAD] = useState(false);
 
   // Observer le changement d'état de la connexion utilisateur (FB-Auth)
-  // Remarquez que ce code est dans un useEffect() car on veut l'exécuter 
-  // UNE SEULE FOIS (regardez le tableau des 'deps' - dépendances) et ceci 
+  // Remarquez que ce code est dans un useEffect() car on veut l'exécuter
+  // UNE SEULE FOIS (regardez le tableau des 'deps' - dépendances) et ceci
   // APRÈS l'affichage du composant
   useEffect(() => crudUtilisateurs.observerConnexion(setUtilisateur), []);
-  
+
   /**
    * Gérer la soumission du formulaire pour ajouter un nouveau dossier
    * @param {string} nom nom du dossier
@@ -38,12 +43,12 @@ export default function Appli() {
       nom: nom,
       couverture: couverture,
       couleur: couleur,
-      signets: [] // ce tableau n'est pas utilisé en ce moment, mais c'est ici que je voudrais ajouter les "références" aux signets de chaque dossier (à compléter dans une autre vie)
+      signets: [], // ce tableau n'est pas utilisé en ce moment, mais c'est ici que je voudrais ajouter les "références" aux signets de chaque dossier (à compléter dans une autre vie)
     };
     // Créer le dossier dans Firestore
     crudDossiers.creer(utilisateur.uid, objDossier).then(
       // Modifier l'état des dossiers
-      doc => setDossiers([...dossiers, {...doc.data(), id: doc.id}]) 
+      (doc) => setDossiers([...dossiers, { ...doc.data(), id: doc.id }])
     );
     // Fermer la boîte de dialogue
     setOuvertAD(false);
@@ -53,20 +58,35 @@ export default function Appli() {
     <div className="Appli">
       {
         // Si un utilisateur est connecté :
-        utilisateur ?
+        utilisateur ? (
           <>
             <Entete utilisateur={utilisateur} />
             <section className="contenu-principal">
-              <ListeDossiers utilisateur={utilisateur} etatDossiers={etatDossiers} />
-              <AjouterDossier ouvert={ouvertAD} setOuvert={setOuvertAD} gererAjout={gererAjouter} />
-              <Fab onClick={() => setOuvertAD(true)} className="ajoutRessource" color="primary" aria-label="Ajouter dossier">
+              <TriDossiers trierDossiers={trierDossiers} />
+              <ListeDossiers
+                utilisateur={utilisateur}
+                etatDossiers={etatDossiers}
+                trierDossiers={trierDossiers}
+              />
+              <AjouterDossier
+                ouvert={ouvertAD}
+                setOuvert={setOuvertAD}
+                gererAjout={gererAjouter}
+              />
+              <Fab
+                onClick={() => setOuvertAD(true)}
+                className="ajoutRessource"
+                color="primary"
+                aria-label="Ajouter dossier"
+              >
                 <AddIcon />
               </Fab>
             </section>
           </>
-        // ... et sinon :
-        :
+        ) : (
+          // ... et sinon :
           <Accueil />
+        )
       }
     </div>
   );
