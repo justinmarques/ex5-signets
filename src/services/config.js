@@ -10,9 +10,8 @@ const firebaseConfig = {
     projectId: "prog-veilletechno",
     storageBucket: "prog-veilletechno.appspot.com",
     messagingSenderId: "411840747805",
-    appId: "1:411840747805:web:23897a01c691fe51b8e9f4"
+    appId: "1:411840747805:web:fcba6be9afa992b2b8e9f4"
 };
-
 export default firebaseConfig;
 
 // Nom de la collection principale

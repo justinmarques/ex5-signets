@@ -9,10 +9,10 @@ import { utilRef, dossRef } from './config';
  * @returns {Promise<Firestore.DocumentSnapshot} Promesse avec le document qui vient d'être ajouté 
  */
 export async function creer(uid, dossier) {
-  // Ajouter le champ "datemodif"
-  dossier.datemodif = firebase.firestore.FieldValue.serverTimestamp();
-  const refDoc = await firestore.collection(utilRef).doc(uid).collection(dossRef).add(dossier);
-  return refDoc.get();
+    // Ajouter le champ "datemodif"
+    dossier.datemodif = firebase.firestore.FieldValue.serverTimestamp();
+    const refDoc = await firestore.collection(utilRef).doc(uid).collection(dossRef).add(dossier);
+    return refDoc.get();
 }
 
 /**
@@ -22,33 +22,31 @@ export async function creer(uid, dossier) {
  * @returns {Promise<any[]>} Promesse avec le tableau des documents de dossiers
  */
 export async function lireTout(uid, methodeTri) {
-  const dossiers = [];
+    const dossiers = [];
 
-  // Tris possibles des dossiers
-  const triPossibles = [
-    {
-      propriete: "datemodif",
-      ordre: "desc",
-    },
-    {
-      propriete: "nom",
-      ordre: "asc",
-    },
-    {
-      propriete: "nom",
-      ordre: "desc",
-    },
-  ];
+    const triPossibles = [{
+            propriete: "datemodif",
+            ordre: "desc",
+        },
+        {
+            propriete: "nom",
+            ordre: "asc",
+        },
+        {
+            propriete: "nom",
+            ordre: "desc",
+        },
+    ];
 
-  /************************************************************** Exercice #5 : question A **************************/
-  // Modifier très légèrement la ligne suivante
-  const reponse = await firestore.collection(utilRef).doc(uid).collection(dossRef).orderBy(triPossibles[methodeTri].propriete, triPossibles[methodeTri].ordre).get();
-  reponse.forEach(
-    doc => {
-      dossiers.push({id: doc.id, ...doc.data()})
-    }
-  );
-  return dossiers;
+    /************************************************************** Exercice #5 : question A **************************/
+    // Modifier très légèrement la ligne suivante
+    const reponse = await firestore.collection(utilRef).doc(uid).collection(dossRef).orderBy(triPossibles[methodeTri].propriete, triPossibles[methodeTri].ordre).get();
+    reponse.forEach(
+        doc => {
+            dossiers.push({ id: doc.id, ...doc.data() })
+        }
+    );
+    return dossiers;
 }
 
 /**
@@ -58,10 +56,10 @@ export async function lireTout(uid, methodeTri) {
  * @returns {Promise<void>} 
  */
 export async function supprimer(uid, idd) {
-  /************************************************************** Exercice #5 : question B **************************/
-  // Une seule ligne de code suffit
-  // return await [votre instruction pour supprimer le dossier de l'utilisateur connecté dans Firestore ici];
-  return await firestore.collection(utilRef).doc(uid).collection(dossRef).doc(idd).delete();
+    /************************************************************** Exercice #5 : question B **************************/
+    // Une seule ligne de code suffit
+    // return await [votre instruction pour supprimer le dossier de l'utilisateur connecté dans Firestore ici];
+    return await firestore.collection(utilRef).doc(uid).collection(dossRef).doc(idd).delete();
 }
 
 /**
@@ -71,7 +69,7 @@ export async function supprimer(uid, idd) {
  * @param {Object} dossier document à modifier dans la collection des dossiers
  * @returns {Promise<null>} Promesse confirmant la mise à jour
  */
- export async function modifier(uid, did, dossier) {
-  // Cadeau : à compléter pendant vos vacances d'été ;-)
-  return true;
+export async function modifier(uid, did, dossier) {
+    // Cadeau : à compléter pendant vos vacances d'été ;-)
+    return true;
 }
