@@ -7,12 +7,13 @@ import firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
 import 'firebase/firestore';
 import 'firebase/auth';
+
 // Importer l'objet de configuration 
 import firebaseConfig from './config';
 
 // Initialiser Firebase
-if(!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
 }
 
 // Initialiser Auth
